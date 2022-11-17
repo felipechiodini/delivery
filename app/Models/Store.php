@@ -21,7 +21,7 @@ class Store extends Model
     ];
 
     protected $appends = [
-        'closed'
+        'open'
     ];
 
     public function address()
@@ -39,7 +39,7 @@ class Store extends Model
         return $this->hasMany(Schedule::class);
     }
 
-    public function getClosedAttribute(): Bool
+    public function getOpenAttribute(): Bool
     {
         $weekMap = [
             0 => 'Dom',
@@ -53,6 +53,6 @@ class Store extends Model
 
         $weekday = $weekMap[Carbon::now()->dayOfWeek];
         $todaySchedule = $this->schedules->where('day', $weekday)->first();
-        return now()->between($todaySchedule->start, $todaySchedule->end);
+        return now()->between($todaySchedule->start, $todaySchedule->end) === true;
     }
 }
